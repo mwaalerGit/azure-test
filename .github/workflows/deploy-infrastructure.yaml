@@ -7,6 +7,7 @@ on:
     branches: ["main"]
     paths:
       - "infrastructure/**"
+      - "github/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -37,9 +38,9 @@ jobs:
       - name: Deploy to Dev
         uses: azure/cli@v2
         with:
-          azcliversion: 2.0.72
+          azcliversion: latest
           inlineScript: |
             az deployment group create \
-                --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \ 
+                --resource-group rg-mwaaler-azure-test \ 
                 --template-file infrastructure/main.bicep \
                 --parameters @infrastructure/parameters.dev.json
