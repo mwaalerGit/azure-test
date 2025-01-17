@@ -7,7 +7,7 @@ on:
     branches: ["main"]
     paths:
       - "infrastructure/**"
-      - "github/**"
+      - ".github/**"
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -41,6 +41,6 @@ jobs:
           azcliversion: latest
           inlineScript: |
             az deployment group create \
-                --resource-group rg-mwaaler-azure-test \ 
+                --resource-group rg-mwaaler-azure-test \
                 --template-file infrastructure/main.bicep \
                 --parameters @infrastructure/parameters.dev.json
