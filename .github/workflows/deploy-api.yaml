@@ -30,13 +30,13 @@ jobs:
           dotnet-version: "9.0.x"
 
       - name: Restore dependencies
-        run: dotnet restore ./WebApplication1/WebApplication1.csproj
+        run: dotnet restore api/WebApplication1.csproj
 
       - name: Build
-        run: dotnet build --configuration Release ./WebApplication1/WebApplication1.csproj
+        run: dotnet build --configuration Release api/WebApplication1.csproj
 
       - name: Publish
-        run: dotnet publish --configuration Release --output ./publish ./WebApplication1/WebApplication1.csproj
+        run: dotnet publish --configuration Release --output ./publish api/WebApplication1.csproj
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
