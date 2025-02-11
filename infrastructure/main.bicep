@@ -29,3 +29,61 @@ resource appservice 'Microsoft.Web/sites@2024-04-01' = {
     serverFarmId: appServicePlan.id
   }
 }
+
+resource dbAccount 'Microsoft.DocumentDB/databaseAccounts@2023-11-15' = {
+  name: '${env}dbaccount'
+  location: location
+  properties: {
+    databaseAccountOfferType: 'Standard'
+    consistencyPolicy: {
+      defaultConsistencyLevel: 'Session'
+    }
+    locations: [
+      {
+        locationName: location
+      }
+    ]
+  }
+}
+
+resource database 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases@2023-11-15' = {
+  parent: dbAccount
+  name: 'db'
+  properties: {
+    resource: {
+      id: 'db'
+    }
+    options: {
+      throughput: 1000
+    }
+  }
+}
+
+resource container 'Microsoft.DocumentDB/databaseAccounts/sqlDatabases/containers@2023-11-15' = {
+  parent: database
+  name: 'container'
+  properties: {
+    resource: {
+      id: 'container'
+      partitionKey: {
+        paths: [
+          '/id'
+        ]
+        kind: 'Hash'
+      }
+      indexingPolicy: {
+        indexingMode: 'consistent'
+        includedPaths: [
+          {
+            path: '/*'
+          }
+        ]
+        excludedPaths: [
+          {
+            path: '/_etag/?'
+          }
+        ]
+      }
+    }
+  }
+}
